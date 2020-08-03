@@ -18,12 +18,18 @@ def chat(client_sock):
 
             # If the client is picking something up from the server
             if fd is client_sock:
-                print(client_sock.recv(1024).decode("utf8"))
-
+                recieved = client_sock.recv(1024).decode("utf8")
+                if recieved == "":
+                    client_sock.close()
+                    sys.exit(0)
+                else:
+                    print("%s" % recieved)
+                
             # If there is input detected from the client
             else:
                 msg = sys.stdin.readline()
                 client_sock.send(msg.encode("utf8"))
+                print("Done writing something")
         
 # Set up client socket
 def main():

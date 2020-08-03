@@ -112,28 +112,43 @@ int main()
             printf("New connection , socket fd is %d , ip is : %s , port : %d, asking for verification now \n"
             ,new_socket , inet_ntoa(servaddr.sin_addr) , ntohs(servaddr.sin_port));   
             
-            
             // Get username
             bzero(buffer, MAX);
             strcpy(buffer, "Username:");
             write(new_socket, buffer, sizeof(buffer));
             bzero(buffer, MAX);  
             read(new_socket, buffer, sizeof(buffer));
+            printf("%s\n", buffer);
+            if (buffer[strlen(buffer) - 1] == '\n')
+                buffer[strlen(buffer) - 1] = '\0';
             strcpy(usr, buffer); 
-            printf("%s\n",usr);
+            printf("%s\n", usr);
             // Get password
             bzero(buffer, MAX);
             strcpy(buffer, "Password:");
             write(new_socket, buffer, sizeof(buffer));
             bzero(buffer, MAX);  
             read(new_socket, buffer, sizeof(buffer));
+            if (buffer[strlen(buffer) - 1] == '\n')
+                buffer[strlen(buffer) - 1] = '\0';
+            printf("%s\n", buffer);
             strcpy(pswd, buffer); 
-           
-            int i;
-            for (i = 0; i < sizeof(allUsers) / sizeof(allUsers[0]); i++)
+            printf("%s\n", pswd);
+             
+            printf("I am here\n");
+            printf("I am here\n");
+            printf("I am here\n");
+            printf("I am here\n");
+            printf("I am here\n");
+
+            for (int i = 0; i < 2; i++)
             {
-               if (strcmp(allUsers[i].username, usr) == 0 && strcmp(allUsers[i].password, pswd) == 0)
+               printf("Reached this stage\n"); 
+               printf("%s\n", allUsers[i].username);
+               printf("%s\n", allUsers[i].password);
+               if ((strcmp(allUsers[i].username, usr) == 0) && (strcmp(allUsers[i].password, pswd) == 0))
                {
+                    printf("Succeeded"); 
                     bzero(buffer, MAX);
                     strcpy(buffer, "Verification succeeded, welcome to the chat");
                     write(new_socket, buffer, sizeof(buffer));
@@ -141,9 +156,8 @@ int main()
                }
             }
              
-                
             if (is_verified)
-            {
+            { 
                 //add new socket to array of sockets  
                 for (int i = 0; i < max_clients; i++)   
                 {   
@@ -155,8 +169,18 @@ int main()
                         break;   
                     }   
                 }   
-                is_verified = 0;
             }
+            else
+            {
+                printf("Sorry, credentials incorrect");
+                bzero(buffer, MAX);
+                strcpy(buffer, "Sorry, credentials incorrect");
+                if (buffer[strlen(buffer) - 1] == '\n')
+                    buffer[strlen(buffer) - 1] = '\0';
+                write(new_socket, buffer, sizeof(buffer));
+                close(new_socket);
+            }
+            is_verified = 0;
         }   
              
         //else its some IO operation on some other socket 

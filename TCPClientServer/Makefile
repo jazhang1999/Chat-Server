@@ -1,6 +1,6 @@
 
 CC = gcc
-CFLAGS = 
+CFLAGS = -g
 
 # Target all: will make all possible executables
 all: server.x client.x
