@@ -18,7 +18,7 @@ def chat(client_sock):
 
             # If the client is picking something up from the server
             if fd is client_sock:
-                print(client_sock.recv(1024)decode("utf8"))
+                print(client_sock.recv(1024).decode("utf8"))
 
             # If there is input detected from the client
             else:
@@ -38,7 +38,7 @@ def main():
     server_address = ("localhost", PORT)
     print("Connecting to %s Port %s" % server_address)
     client_sock.connect(server_address)
-    
+    print("Connected")   
     chat(client_sock)
 
 # Runner

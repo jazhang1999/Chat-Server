@@ -20,22 +20,19 @@
 int main() 
 { 
     int master_socket, new_socket;
-    int max_sd;
-    int sd;
-    int activity;
-    int valread;
-    int len; 
-    int client_socket[5], max_clients = 5; // Define client sockets - change later
+    int client_socket[5] = {0}, max_clients = 5; 
+    int is_verified = 0;
     struct sockaddr_in servaddr; 
-    fd_set readfds; // File descriptor sets
-    char * message = "Hello from server";
+    fd_set readfds; 
     char buffer[MAX];
-    
-    for (int i = 0; i < max_clients; i++)
-    {
-        client_socket[i] = 0;
-    }
+    char usr[MAX];
+    char pswd[MAX];
 
+    struct userpwd{
+        char *username;
+        char *password;
+    } allUsers[] = {{"Nick", "123"}, {"Nick2", "456"}}; 
+    
     // socket create and verification - server creating a server socket
     master_socket = socket(AF_INET, SOCK_STREAM, 0); 
     if (master_socket == -1) { 
@@ -67,22 +64,20 @@ int main()
     else
         printf("Server listening..\n"); 
 
-    len = sizeof(servaddr); 
+    int len = sizeof(servaddr); 
 
     while(1)   
     {   
-        //clear the socket set  
+        //clear the socket set and add master socket
         FD_ZERO(&readfds);   
-     
-        //add master socket to set  
         FD_SET(master_socket, &readfds);   
-        max_sd = master_socket;   
+        int max_sd = master_socket;   
              
         //add child sockets to set  
         for (int i = 0 ; i < max_clients ; i++)   
         {   
             //socket descriptor  
-            sd = client_socket[i];   
+            int sd = client_socket[i];   
                  
             //if valid socket descriptor then add to read list  
             if(sd > 0)   
@@ -96,7 +91,7 @@ int main()
         //wait for an activity on one of the sockets , timeout is NULL ,  
         //so wait indefinitely  
         struct timeval timeout = {1, 0};
-        activity = select(max_sd + 1 , &readfds, NULL , NULL , &timeout);    
+        int activity = select(max_sd + 1 , &readfds, NULL , NULL , &timeout);    
         if ((activity < 0) && (errno!=EINTR))   
         {   
             printf("select error");   
@@ -114,30 +109,64 @@ int main()
             }   
              
             //inform user of socket number - used in send and receive commands  
-            printf("New connection , socket fd is %d , ip is : %s , port : %d\n" 
-                   ,new_socket , inet_ntoa(servaddr.sin_addr) , ntohs(servaddr.sin_port));   
+            printf("New connection , socket fd is %d , ip is : %s , port : %d, asking for verification now \n"
+            ,new_socket , inet_ntoa(servaddr.sin_addr) , ntohs(servaddr.sin_port));   
+            
+            
+            // Get username
+            bzero(buffer, MAX);
+            strcpy(buffer, "Username:");
+            write(new_socket, buffer, sizeof(buffer));
+            bzero(buffer, MAX);  
+            read(new_socket, buffer, sizeof(buffer));
+            strcpy(usr, buffer); 
+            printf("%s\n",usr);
+            // Get password
+            bzero(buffer, MAX);
+            strcpy(buffer, "Password:");
+            write(new_socket, buffer, sizeof(buffer));
+            bzero(buffer, MAX);  
+            read(new_socket, buffer, sizeof(buffer));
+            strcpy(pswd, buffer); 
            
-            //add new socket to array of sockets  
-            for (int i = 0; i < max_clients; i++)   
-            {   
-                //if position is empty  
-                if(client_socket[i] == 0 )   
+            int i;
+            for (i = 0; i < sizeof(allUsers) / sizeof(allUsers[0]); i++)
+            {
+               if (strcmp(allUsers[i].username, usr) == 0 && strcmp(allUsers[i].password, pswd) == 0)
+               {
+                    bzero(buffer, MAX);
+                    strcpy(buffer, "Verification succeeded, welcome to the chat");
+                    write(new_socket, buffer, sizeof(buffer));
+                    is_verified = 1;
+               }
+            }
+             
+                
+            if (is_verified)
+            {
+                //add new socket to array of sockets  
+                for (int i = 0; i < max_clients; i++)   
                 {   
-                    client_socket[i] = new_socket;   
-                    printf("Adding to list of sockets as %d\n" , i);   
-                    break;   
+                    //if position is empty  
+                    if(client_socket[i] == 0 )   
+                    {   
+                        client_socket[i] = new_socket;   
+                        printf("Adding to list of sockets as %d\n" , i);   
+                        break;   
+                    }   
                 }   
-            }   
+                is_verified = 0;
+            }
         }   
              
         //else its some IO operation on some other socket 
         for (int i = 0; i < max_clients; i++)   
         {   
-            sd = client_socket[i];        
+            int sd = client_socket[i];        
             if (FD_ISSET( sd, &readfds))   
             {   
                 bzero(buffer, MAX);
-                valread = read(sd , buffer, sizeof(buffer));
+                int valread = read(sd , buffer, sizeof(buffer));
                 if (valread == 0)
                 {   
                     //Somebody disconnected, get details and print  
