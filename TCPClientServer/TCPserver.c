@@ -11,6 +11,7 @@
 #include <arpa/inet.h> 
 #include <sys/types.h>  
 #include <sys/time.h> 
+#include <time.h>
 
 #define MAX 80 
 #define PORT 8080 
@@ -21,12 +22,14 @@ int main()
 { 
     int master_socket, new_socket;
     int client_socket[5] = {0}, max_clients = 5; 
+    char client_name[5][MAX];
     int is_verified = 0;
     struct sockaddr_in servaddr; 
     fd_set readfds; 
     char buffer[MAX];
     char usr[MAX];
     char pswd[MAX];
+    char msg[MAX];
 
     struct userpwd{
         char *username;
@@ -115,40 +118,31 @@ int main()
             // Get username
             bzero(buffer, MAX);
             strcpy(buffer, "Username:");
+            if (buffer[strlen(buffer) - 1] == '\n')
+                buffer[strlen(buffer) - 1] = '\0';
             write(new_socket, buffer, sizeof(buffer));
             bzero(buffer, MAX);  
             read(new_socket, buffer, sizeof(buffer));
-            printf("%s\n", buffer);
             if (buffer[strlen(buffer) - 1] == '\n')
                 buffer[strlen(buffer) - 1] = '\0';
             strcpy(usr, buffer); 
-            printf("%s\n", usr);
+
             // Get password
             bzero(buffer, MAX);
             strcpy(buffer, "Password:");
+            if (buffer[strlen(buffer) - 1] == '\n')
+                buffer[strlen(buffer) - 1] = '\0';
             write(new_socket, buffer, sizeof(buffer));
             bzero(buffer, MAX);  
             read(new_socket, buffer, sizeof(buffer));
             if (buffer[strlen(buffer) - 1] == '\n')
                 buffer[strlen(buffer) - 1] = '\0';
-            printf("%s\n", buffer);
             strcpy(pswd, buffer); 
-            printf("%s\n", pswd);
-             
-            printf("I am here\n");
-            printf("I am here\n");
-            printf("I am here\n");
-            printf("I am here\n");
-            printf("I am here\n");
 
             for (int i = 0; i < 2; i++)
             {
-               printf("Reached this stage\n"); 
-               printf("%s\n", allUsers[i].username);
-               printf("%s\n", allUsers[i].password);
                if ((strcmp(allUsers[i].username, usr) == 0) && (strcmp(allUsers[i].password, pswd) == 0))
                {
-                    printf("Succeeded"); 
                     bzero(buffer, MAX);
                     strcpy(buffer, "Verification succeeded, welcome to the chat");
                     write(new_socket, buffer, sizeof(buffer));
@@ -165,21 +159,28 @@ int main()
                     if(client_socket[i] == 0 )   
                     {   
                         client_socket[i] = new_socket;   
+                        bzero(client_name[i], MAX);
+                        if (usr[strlen(usr) - 1] == '\n')
+                            usr[strlen(usr) - 1] = '\0';
+                        strcpy(client_name[i], usr);
                         printf("Adding to list of sockets as %d\n" , i);   
+                        printf("Adding to list of users as %s\n", client_name[i]);
                         break;   
                     }   
                 }   
             }
             else
             {
-                printf("Sorry, credentials incorrect");
                 bzero(buffer, MAX);
                 strcpy(buffer, "Sorry, credentials incorrect");
                 if (buffer[strlen(buffer) - 1] == '\n')
                     buffer[strlen(buffer) - 1] = '\0';
                 write(new_socket, buffer, sizeof(buffer));
                 close(new_socket);
+                printf("Incorrect credentials given, connection refused\n");
             }
+            bzero(usr, MAX);
+            bzero(pswd, MAX);
             is_verified = 0;
         }   
              
@@ -201,17 +202,31 @@ int main()
                     //Close the socket and mark as 0 in list for reuse  
                     close(sd);   
                     client_socket[i] = 0;   
+                    
                 }   
                      
                 //Echo back the message that came in  
                 else 
                 {   
+                    bzero(msg, MAX);                     
                     // copy server message in the buffer 
                     // and send that buffer to client 
                     for (int j = 0; j < max_clients; j++)
                     {
                         if (j != i && client_socket[j] != 0)
-                            write(client_socket[j], buffer, sizeof(buffer));
+                        {
+                            // Get Timestamp
+                            time_t now = time(NULL);
+                            struct tm *now_tm = localtime(&now);
+                            int hour = now_tm->tm_hour;
+                            int min = now_tm->tm_min;
+
+                            sprintf(msg, "<%s at %d:%d>: %s", client_name[i], hour, min, buffer);
+                            if (msg[strlen(msg) - 1] == '\n')
+                                msg[strlen(msg) - 1] = '\0';
+                            write(client_socket[j], msg, sizeof(msg));
+                            bzero(msg, MAX);
+                        }
                     }
                     bzero(buffer, MAX);     
                 } 

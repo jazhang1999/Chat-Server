@@ -29,7 +29,6 @@ def chat(client_sock):
             else:
                 msg = sys.stdin.readline()
                 client_sock.send(msg.encode("utf8"))
-                print("Done writing something")
         
 # Set up client socket
 def main():
@@ -44,7 +43,6 @@ def main():
     server_address = ("localhost", PORT)
     print("Connecting to %s Port %s" % server_address)
     client_sock.connect(server_address)
-    print("Connected")   
     chat(client_sock)
 
 # Runner

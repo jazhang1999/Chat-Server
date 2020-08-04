@@ -22,6 +22,7 @@ int main()
     char buffer[MAX];     
     char answer[MAX];
     sprintf(buffer, "Username: %s", "Nick");
+    sprintf(buffer, "%s is here", buffer);
     printf("%s\n", buffer);
     strcpy(answer, buffer);
     printf("%s\n", answer);
