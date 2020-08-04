@@ -34,7 +34,8 @@ int main()
     struct userpwd{
         char *username;
         char *password;
-    } allUsers[] = {{"Nick", "123"}, {"Nick2", "456"}}; 
+        int available;
+    } allUsers[] = {{"Nick", "123", 1}, {"Nick2", "456", 1}}; 
     
     // socket create and verification - server creating a server socket
     master_socket = socket(AF_INET, SOCK_STREAM, 0); 
@@ -144,9 +145,15 @@ int main()
                if ((strcmp(allUsers[i].username, usr) == 0) && (strcmp(allUsers[i].password, pswd) == 0))
                {
                     bzero(buffer, MAX);
-                    strcpy(buffer, "Verification succeeded, welcome to the chat");
-                    write(new_socket, buffer, sizeof(buffer));
-                    is_verified = 1;
+                    if (allUsers[i].available) {
+                        strcpy(buffer, "Verification succeeded, welcome to the chat");
+                        write(new_socket, buffer, sizeof(buffer));
+                        is_verified = 1;    
+                        allUsers[i].available = 0;
+                    } else {
+                        strcpy(buffer, "Sorry, this account is already in use");
+                        write(new_socket, buffer, sizeof(buffer));
+                    } 
                }
             }
              
@@ -156,7 +163,7 @@ int main()
                 for (int i = 0; i < max_clients; i++)   
                 {   
                     //if position is empty  
-                    if(client_socket[i] == 0 )   
+                    if(client_socket[i] == 0)   
                     {   
                         client_socket[i] = new_socket;   
                         bzero(client_name[i], MAX);
@@ -172,12 +179,12 @@ int main()
             else
             {
                 bzero(buffer, MAX);
-                strcpy(buffer, "Sorry, credentials incorrect");
+                strcpy(buffer, "Credentials either incorrect or already in use");
                 if (buffer[strlen(buffer) - 1] == '\n')
                     buffer[strlen(buffer) - 1] = '\0';
                 write(new_socket, buffer, sizeof(buffer));
                 close(new_socket);
-                printf("Incorrect credentials given, connection refused\n");
+                printf("Invalid credentials given, connection refused\n");
             }
             bzero(usr, MAX);
             bzero(pswd, MAX);
@@ -204,7 +211,6 @@ int main()
                     client_socket[i] = 0;   
                     
                 }   
-                     
                 //Echo back the message that came in  
                 else 
                 {   

@@ -40,7 +40,8 @@ def main():
         print("Socket successfully created")
     
     # Connect to the server address
-    server_address = ("localhost", PORT)
+    
+    server_address = (sys.argv[1], PORT)
     print("Connecting to %s Port %s" % server_address)
     client_sock.connect(server_address)
     chat(client_sock)
