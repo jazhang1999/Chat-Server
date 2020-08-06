@@ -13,7 +13,7 @@
 #include <sys/time.h> 
 #include <time.h>
 
-#define MAX 80 
+#define MAX 80
 #define PORT 8080 
 #define SA struct sockaddr 
   
@@ -35,15 +35,15 @@ int main()
         char *username;
         char *password;
         int available;
-    } allUsers[] = {{"Nick", "123", 1}, {"Nick2", "456", 1}}; 
+    } allUsers[] = {{"Nick", "dongGua123", 1}, {"Bridget", "dongGua123", 1}, 
+                    {"Dad", "dongGua123", 1}, {"Mom", "dongGua123", 1}, {"Percy", "dongGua123", 1}};
     
     // socket create and verification - server creating a server socket
     master_socket = socket(AF_INET, SOCK_STREAM, 0); 
     if (master_socket == -1) { 
         printf("socket creation failed...\n"); 
         exit(0); 
-    } 
-    else
+    } else
         printf("Socket successfully created..\n"); 
 
     /* Assign server address info after cleaning out */ 
@@ -56,37 +56,31 @@ int main()
     if ((bind(master_socket, (SA*)&servaddr, sizeof(servaddr))) != 0) { 
         printf("Socket bind failed...\n"); 
         exit(0); 
-    } 
-    else
+    } else
         printf("Socket successfully binded..\n"); 
   
     // Now server is ready to listen and verification 
     if ((listen(master_socket, 5)) != 0) { 
         printf("Listen failed...\n"); 
         exit(0); 
-    } 
-    else
+    } else
         printf("Server listening..\n"); 
 
     int len = sizeof(servaddr); 
 
-    while(1)   
-    {   
+    while(1) {   
         //clear the socket set and add master socket
         FD_ZERO(&readfds);   
         FD_SET(master_socket, &readfds);   
         int max_sd = master_socket;   
              
         //add child sockets to set  
-        for (int i = 0 ; i < max_clients ; i++)   
-        {   
+        for (int i = 0 ; i < max_clients ; i++) {   
             //socket descriptor  
-            int sd = client_socket[i];   
-                 
+            int sd = client_socket[i];    
             //if valid socket descriptor then add to read list  
             if(sd > 0)   
                 FD_SET( sd, &readfds);   
-                 
             //highest file descriptor number, need it for the select function  
             if(sd > max_sd)   
                 max_sd = sd;   
@@ -97,17 +91,14 @@ int main()
         struct timeval timeout = {1, 0};
         int activity = select(max_sd + 1 , &readfds, NULL , NULL , &timeout);    
         if ((activity < 0) && (errno!=EINTR))   
-        {   
-            printf("select error");   
-        }   
+            printf("Select error");   
              
         //If something happened on the master socket ,  
         //then its an incoming connection  
         if (FD_ISSET(master_socket, &readfds))   
         {   
             new_socket = accept(master_socket,(struct sockaddr *)&servaddr, (socklen_t*)&len);
-            if (new_socket < 0)
-            {   
+            if (new_socket < 0) {   
                 perror("accept");   
                 exit(EXIT_FAILURE);   
             }   
@@ -118,7 +109,7 @@ int main()
             
             // Get username
             bzero(buffer, MAX);
-            strcpy(buffer, "Username:");
+            strcpy(buffer, "<Server> Enter Username:");
             write(new_socket, buffer, strlen(buffer));
             bzero(buffer, MAX);  
             read(new_socket, buffer, sizeof(buffer));
@@ -128,7 +119,7 @@ int main()
 
             // Get password
             bzero(buffer, MAX);
-            strcpy(buffer, "Password:");
+            strcpy(buffer, "<Server> Enter Password:");
             if (buffer[strlen(buffer) - 1] == '\n')
                 buffer[strlen(buffer) - 1] = '\0';
             write(new_socket, buffer, strlen(buffer));
@@ -138,10 +129,8 @@ int main()
                 buffer[strlen(buffer) - 1] = '\0';
             strcpy(pswd, buffer); 
 
-            for (int i = 0; i < 2; i++)
-            {
-               if ((strcmp(allUsers[i].username, usr) == 0) && (strcmp(allUsers[i].password, pswd) == 0))
-               {
+            for (int i = 0; i < 2; i++) {
+               if ((strcmp(allUsers[i].username, usr) == 0) && (strcmp(allUsers[i].password, pswd) == 0)) {
                     bzero(buffer, MAX);
                     if (allUsers[i].available) {
                         strcpy(buffer, "Verification succeeded, welcome to the chat");
@@ -155,14 +144,11 @@ int main()
                }
             }
              
-            if (is_verified)
-            { 
+            if (is_verified) {
                 //add new socket to array of sockets  
-                for (int i = 0; i < max_clients; i++)   
-                {   
+                for (int i = 0; i < max_clients; i++) {
                     //if position is empty  
-                    if(client_socket[i] == 0)   
-                    {   
+                    if(client_socket[i] == 0) {
                         client_socket[i] = new_socket;   
                         bzero(client_name[i], MAX);
                         if (usr[strlen(usr) - 1] == '\n')
@@ -173,9 +159,7 @@ int main()
                         break;   
                     }   
                 }   
-            }
-            else
-            {
+            } else {
                 bzero(buffer, MAX);
                 strcpy(buffer, "Credentials either incorrect or already in use");
                 if (buffer[strlen(buffer) - 1] == '\n')
@@ -190,15 +174,14 @@ int main()
         }   
              
         //else its some IO operation on some other socket 
-        for (int i = 0; i < max_clients; i++)   
-        {   
+        for (int i = 0; i < max_clients; i++) {
             int sd = client_socket[i];        
-            if (FD_ISSET( sd, &readfds))   
-            {   
+            if (FD_ISSET( sd, &readfds)) {
                 bzero(buffer, MAX);
                 int valread = read(sd , buffer, sizeof(buffer));
-                if (valread == 0)
-                {   
+                /* If there is nothing from the client, they exited. If there is,
+                   send it to all other active users */
+                if (valread == 0) {
                     //Somebody disconnected, get details and print  
                     getpeername(sd, (struct sockaddr*)&servaddr, (socklen_t*)&len);   
                     printf("Host disconnected , ip %s , port %d \n" ,  
@@ -207,18 +190,12 @@ int main()
                     //Close the socket and mark as 0 in list for reuse  
                     close(sd);   
                     client_socket[i] = 0;   
-                    
-                }   
-                //Echo back the message that came in  
-                else 
-                {   
+                } else {
                     bzero(msg, MAX);                     
                     // copy server message in the buffer 
                     // and send that buffer to client 
-                    for (int j = 0; j < max_clients; j++)
-                    {
-                        if (j != i && client_socket[j] != 0)
-                        {
+                    for (int j = 0; j < max_clients; j++) {
+                        if (j != i && client_socket[j] != 0) {
                             // Get Timestamp
                             time_t now = time(NULL);
                             struct tm *now_tm = localtime(&now);
