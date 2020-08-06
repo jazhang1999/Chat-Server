@@ -119,9 +119,7 @@ int main()
             // Get username
             bzero(buffer, MAX);
             strcpy(buffer, "Username:");
-            if (buffer[strlen(buffer) - 1] == '\n')
-                buffer[strlen(buffer) - 1] = '\0';
-            write(new_socket, buffer, sizeof(buffer));
+            write(new_socket, buffer, strlen(buffer));
             bzero(buffer, MAX);  
             read(new_socket, buffer, sizeof(buffer));
             if (buffer[strlen(buffer) - 1] == '\n')
@@ -133,7 +131,7 @@ int main()
             strcpy(buffer, "Password:");
             if (buffer[strlen(buffer) - 1] == '\n')
                 buffer[strlen(buffer) - 1] = '\0';
-            write(new_socket, buffer, sizeof(buffer));
+            write(new_socket, buffer, strlen(buffer));
             bzero(buffer, MAX);  
             read(new_socket, buffer, sizeof(buffer));
             if (buffer[strlen(buffer) - 1] == '\n')
@@ -147,12 +145,12 @@ int main()
                     bzero(buffer, MAX);
                     if (allUsers[i].available) {
                         strcpy(buffer, "Verification succeeded, welcome to the chat");
-                        write(new_socket, buffer, sizeof(buffer));
+                        write(new_socket, buffer, strlen(buffer));
                         is_verified = 1;    
                         allUsers[i].available = 0;
                     } else {
                         strcpy(buffer, "Sorry, this account is already in use");
-                        write(new_socket, buffer, sizeof(buffer));
+                        write(new_socket, buffer, strlen(buffer));
                     } 
                }
             }
@@ -182,7 +180,7 @@ int main()
                 strcpy(buffer, "Credentials either incorrect or already in use");
                 if (buffer[strlen(buffer) - 1] == '\n')
                     buffer[strlen(buffer) - 1] = '\0';
-                write(new_socket, buffer, sizeof(buffer));
+                write(new_socket, buffer, strlen(buffer));
                 close(new_socket);
                 printf("Invalid credentials given, connection refused\n");
             }
@@ -230,7 +228,7 @@ int main()
                             sprintf(msg, "<%s at %d:%d>: %s", client_name[i], hour, min, buffer);
                             if (msg[strlen(msg) - 1] == '\n')
                                 msg[strlen(msg) - 1] = '\0';
-                            write(client_socket[j], msg, sizeof(msg));
+                            write(client_socket[j], msg, strlen(msg));
                             bzero(msg, MAX);
                         }
                     }
