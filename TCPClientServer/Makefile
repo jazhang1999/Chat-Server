@@ -3,7 +3,7 @@ CC = gcc
 CFLAGS = -g
 
 # Target all: will make all possible executables
-all: server.x client.x
+all: server.x 
 
 # Create the server-side executable
 server.x: TCPserver.o 
