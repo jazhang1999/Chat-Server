@@ -11,7 +11,7 @@ import time
 
 # Constants
 PORT = 8080 # Socket will open on Port 8080
-MAXLEN = 80 # Maximum amount of characters buffer will need
+MAXLEN = 20 # Maximum amount of characters buffer will need
 
 # Global Variables
 the_sock = 0
@@ -25,7 +25,6 @@ def getMsg(user_entry, client_sock):
 # Facilitate activity on the client
 def chat(sock, window):
     while True:
-       
         try: 
             window.update_idletasks()
             window.update()
@@ -45,8 +44,13 @@ def chat(sock, window):
             if fd is sock:
                 tkDisplay.config(state=tk.NORMAL)
                 texts = tkDisplay.get("1.0", tk.END).strip()
-                temp = sock.recv(1024)
-                recieved = temp.decode("utf-8")
+                temp = sock.recv(2048)
+                pdb.set_trace()
+                
+                # I used \0 from the c buffer as a delimiter
+                while (temp.find(b'\x00') == -1):
+                    temp += sock.recv(2048)
+                recieved = temp.decode("utf-8").rstrip('\0')
                 if recieved == "":
                     sock.close()
                     window.destroy()
@@ -63,7 +67,6 @@ def chat(sock, window):
                    
 # Set up client socket
 def connect():
-   
     # Initialize the socket 
     global the_sock
     the_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)

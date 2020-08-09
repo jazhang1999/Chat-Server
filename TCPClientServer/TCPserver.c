@@ -13,7 +13,7 @@
 #include <sys/time.h> 
 #include <time.h>
 
-#define MAX 80 
+#define MAX 2048
 #define PORT 8080 
 #define SA struct sockaddr 
 #define USERS 5  
@@ -84,7 +84,7 @@ int doVerification() {
     // Get username
     bzero(buffer, MAX);
     strcpy(buffer, "Username:");
-    write(new_socket, buffer, strlen(buffer));
+    write(new_socket, buffer, strlen(buffer) + 1);
     bzero(buffer, MAX);  
     read(new_socket, buffer, sizeof(buffer));
     formatter(buffer);
@@ -94,7 +94,7 @@ int doVerification() {
     bzero(buffer, MAX);
     strcpy(buffer, "Password:");
     formatter(buffer); 
-    write(new_socket, buffer, strlen(buffer));
+    write(new_socket, buffer, strlen(buffer) + 1);
     bzero(buffer, MAX);  
     read(new_socket, buffer, sizeof(buffer));
     formatter(buffer);
@@ -106,15 +106,11 @@ int doVerification() {
         if ((strcmp(allUsers[i].username, usr) == 0) && (strcmp(allUsers[i].password, pswd) == 0)) {
             bzero(buffer, MAX);
             strcpy(buffer, "Verification succeeded, welcome to the chat");
-            write(new_socket, buffer, strlen(buffer));
+            write(new_socket, buffer, strlen(buffer) + 1);
             is_verified = 1;
         }
     }
    
-    // Clear out these buffers 
-    bzero(usr, sizeof(usr));
-    bzero(pswd, sizeof(pswd));
-
     return is_verified;
 }
 
@@ -225,12 +221,12 @@ int main() {
                         {
                             sprintf(msg, "<%s at %02d:%02d>: %s", client_name[i], hour, min, buffer);
                             formatter(msg);
-                            write(client_socket[j], msg, strlen(msg));
+                            write(client_socket[j], msg, strlen(msg) + 1);
                             bzero(msg, MAX);
                         } else if (j == i) {
                             sprintf(msg, "<You at %d:%d>: %s", hour, min, buffer);
                             formatter(msg);
-                            write(client_socket[j], msg, strlen(msg));
+                            write(client_socket[j], msg, strlen(msg) + 1);
                             bzero(msg, MAX);
                         }
                     }
