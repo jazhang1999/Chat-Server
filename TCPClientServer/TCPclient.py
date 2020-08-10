@@ -45,7 +45,7 @@ def chat(sock, window):
                 tkDisplay.config(state=tk.NORMAL)
                 texts = tkDisplay.get("1.0", tk.END).strip()
                 temp = sock.recv(2048)
-                pdb.set_trace()
+                #pdb.set_trace()
                 
                 # I used \0 from the c buffer as a delimiter
                 while (temp.find(b'\x00') == -1):

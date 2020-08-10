@@ -18,12 +18,22 @@
 #define SA struct sockaddr 
 #define USERS 5  
 
-// Variable declaration. Made them global for ease of access
-int master_socket, new_socket;
+/* Global variables. Further explanation of what they are at declaration */
+
+/* The master_socket is essentially the socket that represents the server. The
+ * int array client_socket represents the 5 client sockets allowed by the 
+ * set. The array will be used to access these client sockets. Since there are 
+ * no client sockets in the beginning, initialize all elements to 0 */
+int master_socket;      
 int client_socket[5] = {0}; 
 
+/* Set that contains all the file descriptors of the client sockets */
 fd_set readfds; 
+
+/* Essentially a string array that keeps track of the names of all active users */
 char client_name[10][MAX];
+
+/* All the buffers used to read input and transfer output */
 char buffer[MAX];
 char usr[MAX];
 char pswd[MAX];
@@ -33,18 +43,20 @@ struct sockaddr_in servaddr;
 struct userpwd{
     char *username;
     char *password;
-} allUsers[] = {{"Nick", "dongGua123"}, {"Bridget", "dongGua123"}, {"Dad", "dongGua123"}, 
-                {"Mom", "dongGua123"}, {"Percy", "dongGua123"}}; 
+} allUsers[] = {{"Nick", "123"}, {"Bridget", "123"}, {"Dad", "123"}, 
+                {"Mom", "123"}, {"Percy", "123"}}; 
     
 
-// Formatter for all I/O
+/* Formatter for all I/O. Strips the newline character from some of the 
+ * text generated or recieved to make the presentation better */
 int formatter(char io_to_format[]) {
     if (io_to_format[strlen(io_to_format) - 1] == '\n')
         io_to_format[strlen(io_to_format) - 1] = '\0';
     return 0;
 }
 
-// Prepare the server in order to recieve and handle clients
+/* Prepare the server in order to recieve and handle clients.
+ * Some error handling and status prompts included */
 int set_up_server() {
     // Initialize the master socket 
     master_socket = socket(AF_INET, SOCK_STREAM, 0); 
@@ -77,7 +89,8 @@ int set_up_server() {
     return sizeof(servaddr);
 }
 
-int doVerification() {
+/* Handles client authentication */
+int doVerification(new_socket) {
     
     int is_verified = 0;
 
@@ -118,6 +131,10 @@ int doVerification() {
 int main() {    
     
     int len = set_up_server();
+    
+    /* Serves as a way to handle a new connection in a temporary place
+     * while authentication is taking place */ 
+    int new_socket;
     while(1)   
     {   
         //clear the socket set and add master socket
@@ -160,7 +177,7 @@ int main() {
             
             /* Call function to facilliate user signin, as well as check if 
                the given credentials are valid */ 
-            if (doVerification()) { 
+            if (doVerification(new_socket)) { 
                 //add new socket to the array of sockets, 
                 for (int i = 0; i < USERS; i++) {   
                     if(client_socket[i] == 0) {   
@@ -177,7 +194,8 @@ int main() {
                 // Clear out these buffers 
                 bzero(usr, sizeof(usr)); 
                 bzero(pswd, sizeof(pswd));
-
+            /* Invalid credentials have been recieved, close down whatever 
+             * connection new_socket had */ 
             } else {
                 close(new_socket);
                 printf("Invalid credentials given, connection refused\n");
