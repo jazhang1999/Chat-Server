@@ -15,6 +15,13 @@ Additional Notes:
 * There is a directory `/Experimental` that contains code not used in the project, but is being archived as it may be useful at a later date
 * The file `C-TestingGrounds.c` is an area where I used to test certain C concepts. C is not my strongest language so I always like to have an area to test out what I learn from online
 
+# Changelog
+Since I find commit messages on this repo to not be able to accuratly describe all changes going on, I will be putting all relevent edits and revisions here instead
+
+# Personal Notes
+These are just some things that I learned. Since this project was as much an exercise on coding and development as well as making a working application, I will list some interesting tidbits I picked up as a result of this experience
+
+* __Python better script running__ - previously, I used to run the Python client code by doing `python3 TCPclient.py`. Now, I use a shebang `#!/usr/bin/python3` at the top of the file, and then ran `chmod 755 TCPclient.py` to be able to run the file by doing `./TCPclient.py`
 
 
 
