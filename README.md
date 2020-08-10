@@ -26,7 +26,8 @@ The server code does these things:
 This is the basic overview of the function of the server code. More detailed comments are listed at the source code if there are any lingering questions
 
 # Changelog
-Since I find commit messages on this repo to not be able to accuratly describe all changes going on, from now on I will be putting all relevent edits and revisions here instead
+Since I find commit messages on this repo to not be able to accuratly describe all changes going on, from now on I will be putting all relevent and important edits and revisions here instead:
+* __8/10/20__ - Added additional comments to server/client code and reorganized functions / variable declarations to make code more readable. 
 
 # Personal Notes
 These are just some things that I learned. Since this project was as much an exercise on coding and development as well as making a working application, I will list some interesting tidbits I picked up as a result of this experience
