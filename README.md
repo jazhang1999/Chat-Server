@@ -15,6 +15,13 @@ Additional Notes:
 * There is a directory `/Experimental` that contains code not used in the project, but is being archived as it may be useful at a later date
 * The file `C-TestingGrounds.c` is an area where I used to test certain C concepts. C is not my strongest language so I always like to have an area to test out what I learn from online as well as review what I learned from lectures
 
+# Server (TCPserver.c)
+To create the executable for the server, I would run `make clean` to remove any old object files and executables, then run `make` to build. The executable produced should be name `server.x`. Running `./server.x` will launch the server.
+
+The server code does these things:
+* Sets up the server by initializing the "master socket" - the socket that is associated with the server. I have also configured the server to pick up to a max of 5 different connections. The process is done in function `set_up_server`
+* Now the server will begin functioning until the executable is forcibly exited (Ctrl-C). We used the `select` function to handle multiple incoming communiques between different clients or from client to server. We found this prefereable to using multiple threads to handling different processes concurrently, since that would require an extra layer of complexity. 
+* The server also provides a means of verification. When a user (i.e client) is detected trying to connect to the server, the server will initially prompt the user to enter in a username and password. Should these credentials be correct, the user will be added to the list of accepted client sockets (allowed to participate). Otherwise, the server will reject the incoming connection, and the client side will be shut down. __(The verification process will likely be overhauled later on - this is still in the preliminary test stages)__
 # Changelog
 Since I find commit messages on this repo to not be able to accuratly describe all changes going on, from now on I will be putting all relevent edits and revisions here instead
 
