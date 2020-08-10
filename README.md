@@ -35,6 +35,8 @@ These are just some things that I learned. Since this project was as much an exe
 
 # Future Changes
 * __Ability to Modify/Add-in users__ - Currently, I have predefined 5 username/password pairs that can be used to sign into the chat application. This was done for testing, but in the future I hope to create a system for which new users can be added, and these credentials are not stored in `TCPserver.c`, where the sever code is located.
+* __Allow server/client to select ipaddr/portNum__ - The IP address and port number currently used by both the client and server code are defined as `localhost` and `PORT 8080` constants, respectively. In the future, these should be configurable, especially for the client, where there should be a GUI entry box for the user to configure
+* __Move to Java-based GUI__ - As mentioned above, I have created a GUI in the client by using the `tkinter` Python module. While I do appreciate the simplicity and flexibility of said GUI development, I would like to expand to another language to increase the depth of my knowledge on a topic of development that I have only dipped my toe into. Fairly far into the future, but definetely something that I want to look into.
 
 
 
