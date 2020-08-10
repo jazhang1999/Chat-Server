@@ -16,7 +16,7 @@ Additional Notes:
 * The file `C-TestingGrounds.c` is an area where I used to test certain C concepts. C is not my strongest language so I always like to have an area to test out what I learn from online as well as review what I learned from lectures
 
 # Changelog
-Since I find commit messages on this repo to not be able to accuratly describe all changes going on, I will be putting all relevent edits and revisions here instead
+Since I find commit messages on this repo to not be able to accuratly describe all changes going on, from now on I will be putting all relevent edits and revisions here instead
 
 # Personal Notes
 These are just some things that I learned. Since this project was as much an exercise on coding and development as well as making a working application, I will list some interesting tidbits I picked up as a result of this experience
