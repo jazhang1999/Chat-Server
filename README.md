@@ -13,7 +13,7 @@ We will discuss these applications in greater detail below
 Additional Notes:
 * The Makefile as of right now only compiles the TCPserver.c code into a runnable executable, `server.x` that is used to launch the server. 
 * There is a directory `/Experimental` that contains code not used in the project, but is being archived as it may be useful at a later date
-* The file `C-TestingGrounds.c` is an area where I used to test certain C concepts. C is not my strongest language so I always like to have an area to test out what I learn from online
+* The file `C-TestingGrounds.c` is an area where I used to test certain C concepts. C is not my strongest language so I always like to have an area to test out what I learn from online as well as review what I learned from lectures
 
 # Changelog
 Since I find commit messages on this repo to not be able to accuratly describe all changes going on, I will be putting all relevent edits and revisions here instead
