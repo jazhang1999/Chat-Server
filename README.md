@@ -1,7 +1,7 @@
 # Overview
 This project attempts to create a chat application, that functions like a primitive form of other messaging softwares (WeChat, Apple msg, etc.). Personally, I used it to practice writing in different languages as well as experimenting with socket programing. 
 
-(Insert Picture 1 Here) 
+![2](https://github.com/jazhang1999/Chat-Server/blob/master/figures/Figure1.png?raw=true
 
 In terms of which protocol was used to send data, I used TCP since it seemed the most straightforward to implement. That is why all relevent code is written under the `/TCPClientServer` folder. 
 
