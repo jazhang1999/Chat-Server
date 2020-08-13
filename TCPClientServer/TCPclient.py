@@ -126,36 +126,3 @@ tkMessage.config(state=tk.NORMAL)
 
 chat(the_sock, window)
 
-"""
-topFrame = tk.Frame(window)
-lblName = tk.Label(topFrame, text = "Name:").pack(side=tk.LEFT)
-entName = tk.Entry(topFrame)
-entName.pack(side=tk.LEFT)
-btnConnect = tk.Button(topFrame, text="Connect", command=lambda : connect())
-btnConnect.pack(side=tk.LEFT)
-#btnConnect.bind('<Button-1>', connect)
-topFrame.pack(side=tk.TOP)
-
-displayFrame = tk.Frame(window)
-lblLine = tk.Label(displayFrame, 
-text="*********************************************************************").pack()
-
-scrollBar = tk.Scrollbar(displayFrame)
-scrollBar.pack(side=tk.RIGHT, fill=tk.Y)
-
-tkDisplay = tk.Text(displayFrame, height=20, width=55)
-tkDisplay.pack(side=tk.LEFT, fill=tk.Y, padx=(5, 0))
-tkDisplay.tag_config("tag_your_message", foreground="blue")
-scrollBar.config(command=tkDisplay.yview)
-tkDisplay.config(yscrollcommand=scrollBar.set, background="#F4F6F7", 
-highlightbackground="grey", state="disabled")
-displayFrame.pack(side=tk.TOP)
-
-bottomFrame = tk.Frame(window)
-tkMessage = tk.Text(bottomFrame, height=2, width=55)
-tkMessage.pack(side=tk.LEFT, padx=(5, 13), pady=(5, 10))
-tkMessage.config(highlightbackground="grey", state="disabled")
-tkMessage.bind("<Return>", (lambda event: getChatMessage(tkMessage.get("1.0", tk.END))))
-bottomFrame.pack(side=tk.BOTTOM)
-"""
-
