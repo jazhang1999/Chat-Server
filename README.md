@@ -25,8 +25,20 @@ The server code does these things:
 
 This is the basic overview of the function of the server code. More detailed comments are listed at the source code if there are any lingering questions
 
+# Client (TCPclient.py / JavaClient dir.)
+To run the python client, slimply do `./TCPclient.py`. Since I created the Java client using IntelliJ, I do not know if the Java code can be compiled and run using `javac` and `java --name--`. If possible, please load the file into an IDE so you can build and run using their interface. 
+
+The Python client already has a GUI attached to it, so from there the button prompts should be fairly self-explanatory. On the other hand, the Java client does not have a GUI, so actions like connecting are done automatically in code and are not togglable by actions or event listeners. 
+
+The client code does these things:
+* Sets up a client socket, which will communicate back to the server. 
+* Both clients are built upon performing 2 concurrent tasks: retrieving input from the server, and writing to the server. 
+* __For Python__, this was done by using the `select` function to seperately run the message retrieval, and then having the sending message aspect attached to the action of hitting the <return> key. 
+* __For Java__, this was done with threads; one would handle messages, while the other would handle user input. 
+  
 # Changelog
 Since I find commit messages on this repo to not be able to accuratly describe all changes going on, from now on I will be putting all relevent and important edits and revisions here instead:
+* __8/13/20__ - Added client-side Java code, and made small changes to the C server. Plans to create Java GUI based on this code soon
 * __8/10/20__ - Added additional comments to server/client code and reorganized functions / var. declarations to make code more readable. 
 
 # Personal Notes
