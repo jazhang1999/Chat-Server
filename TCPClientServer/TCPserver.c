@@ -45,10 +45,7 @@ struct userpwd{
     char *password;
 } allUsers[] = {{"Nick", "123"}, {"Bridget", "123"}, {"Dad", "123"}, 
                 {"Mom", "123"}, {"Percy", "123"}}; 
-    
 
-/* Formatter for all I/O. Strips the newline character from some of the 
- * text generated or recieved to make the presentation better */
 int formatter(char io_to_format[]) {
     if (io_to_format[strlen(io_to_format) - 1] == '\n')
         io_to_format[strlen(io_to_format) - 1] = '\0';
@@ -174,7 +171,7 @@ int main() {
                 perror("accept");   
                 exit(EXIT_FAILURE);   
             }   
-            
+            printf("Found incoming connection, attempting to verify\n"); 
             /* Call function to facilliate user signin, as well as check if 
                the given credentials are valid */ 
             if (doVerification(new_socket)) { 
