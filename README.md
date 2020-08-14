@@ -28,7 +28,7 @@ The server code does these things:
 This is the basic overview of the function of the server code. More detailed comments are listed at the source code if there are any lingering questions
 
 # Client (TCPclient.py / JavaClient dir.)
-To run the python client, slimply do `./TCPclient.py`. Since I created the Java client using IntelliJ, I do not know if the Java code can be compiled and run using `javac` and `java --name--`. If possible, please load the file into an IDE so you can build and run using their interface. 
+To run the python client, slimply do `./TCPclient.py`. Since I created the Java client using IntelliJ, if possible please load the file into a similar IDE so you can build and run using their interface. 
 
 The Python client already has a GUI attached to it, so from there the button prompts should be fairly self-explanatory. On the other hand, the Java client does not have a GUI, so actions like connecting are done automatically in code and are not togglable by actions or event listeners. 
 
@@ -40,6 +40,7 @@ The client code does these things:
   
 # Changelog
 Since I find commit messages on this repo to not be able to accuratly describe all changes going on, from now on I will be putting all relevent and important edits and revisions here instead:
+* __8/14/20__ - Added in working GUI for Java code 
 * __8/13/20__ - Added client-side Java code, and made small changes to the C server. Plans to create Java GUI based on this code soon
 * __8/10/20__ - Added additional comments to server/client code and reorganized functions / var. declarations to make code more readable. 
 
@@ -51,7 +52,6 @@ These are just some things that I learned. Since this project was as much an exe
 # Future Changes
 * __Ability to Modify/Add-in users__ - Currently, I have predefined 5 username/password pairs that can be used to sign into the chat application. This was done for testing, but in the future I hope to create a system for which new users can be added, and these credentials are not stored in `TCPserver.c`, where the sever code is located.
 * __Allow server/client to select ipaddr/portNum__ - The IP address and port number currently used by both the client and server code are defined as `localhost` and `PORT 8080` constants, respectively. In the future, these should be configurable, especially for the client, where there should be a GUI entry box for the user to configure
-* __Move to Java-based GUI__ - As mentioned above, I have created a GUI in the client by using the `tkinter` Python module. While I do appreciate the simplicity and flexibility of said GUI development, I would like to expand to another language to increase the depth of my knowledge on a topic of development that I have only dipped my toe into. Fairly far into the future, but definetely something that I want to look into.
 
 
 
