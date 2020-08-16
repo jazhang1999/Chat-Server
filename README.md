@@ -28,7 +28,7 @@ The server code does these things:
 This is the basic overview of the function of the server code. More detailed comments are listed at the source code if there are any lingering questions
 
 # Client (TCPclient.py / JavaClient dir.)
-To run the python client, slimply do `./TCPclient.py`. Since I created the Java client using IntelliJ, if possible please load the file into a similar IDE so you can build and run using their interface. 
+To run the python client, slimply do `./TCPclient.py`. Since I created the Java client using IntelliJ, if possible please load the file into a similar IDE so you can build and run using their interface. This is true for both `./JavaClient` (no GUI) and `./JavaClientGUI` (with GUI). Both of them should be Maven projects as of right now
 
 The Python client already has a GUI attached to it, so from there the button prompts should be fairly self-explanatory. On the other hand, the Java client does not have a GUI, so actions like connecting are done automatically in code and are not togglable by actions or event listeners. 
 
@@ -40,6 +40,7 @@ The client code does these things:
   
 # Changelog
 Since I find commit messages on this repo to not be able to accuratly describe all changes going on, from now on I will be putting all relevent and important edits and revisions here instead:
+* __8/16/20__ - The JavaGUI code now includes the correct pom.xml file for Maven to function on this project now
 * __8/14/20__ - Added in working GUI for Java code 
 * __8/13/20__ - Added client-side Java code, and made small changes to the C server. Plans to create Java GUI based on this code soon
 * __8/10/20__ - Added additional comments to server/client code and reorganized functions / var. declarations to make code more readable. 
