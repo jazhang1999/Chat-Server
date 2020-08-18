@@ -58,6 +58,7 @@ These are just some things that I learned. Since this project was as much an exe
 # Future Changes
 * __Ability to Modify/Add-in users__ - Currently, I have predefined 5 username/password pairs that can be used to sign into the chat application. This was done for testing, but in the future I hope to create a system for which new users can be added, and these credentials are not stored in `TCPserver.c`, where the sever code is located.
 * __Allow server/client to select ipaddr/portNum__ - The IP address and port number currently used by both the client and server code are defined as `localhost` and `PORT 8080` constants, respectively. In the future, these should be configurable, especially for the client, where there should be a GUI entry box for the user to configure
+* __Add more to JavaGUI__ - While I do have a working model, it is far from perfect and is missing many features. I think it would be good to build off of the primitive one I have now in order to create a better Client GUI for this project in general
 
 
 
