@@ -37,7 +37,12 @@ The client code does these things:
 * Both clients are built upon performing 2 concurrent tasks: retrieving input from the server, and writing to the server. 
 * __For Python__, this was done by using the `select` function to seperately run the message retrieval, and then having the sending message aspect attached to the action of hitting the <return> key. 
 * __For Java__, this was done with threads; one would handle messages, while the other would handle user input. 
-  
+
+Below, is the Java Client and Python Client together, for comparisson. Both can communicate with one another on the same server
+<p align="center">
+  <img src="https://github.com/jazhang1999/Chat-Server/blob/master/figures/Figure2.png">
+</p>
+
 # Changelog
 Since I find commit messages on this repo to not be able to accuratly describe all changes going on, from now on I will be putting all relevent and important edits and revisions here instead:
 * __8/16/20__ - The JavaGUI code now includes the correct pom.xml file for Maven to function on this project now
