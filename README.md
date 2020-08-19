@@ -54,6 +54,7 @@ Since I find commit messages on this repo to not be able to accuratly describe a
 These are just some things that I learned. Since this project was as much an exercise on coding and development as well as making a working application, I will list some interesting tidbits I picked up as a result of this experience
 
 * __Python better script running__ - previously, I used to run the Python client code by doing `python3 TCPclient.py`. Now, I use a shebang `#!/usr/bin/python3` at the top of the file, and then ran `chmod 755 TCPclient.py` to be able to run the file by doing `./TCPclient.py`
+* __Socket Programming__ - This was the big focus of the project, since I was attempting to make multiple client sockets connect to a single server socket. They work in C code (server), Java (client) and Python (client). For Python and C I was able to use the `select` function to control concurrent processes that were being carried out between the server and the client, but I could find no such method for Java. Thereby, I used threads for Java to do concurrent processes there.
 
 # Future Changes
 * __Ability to Modify/Add-in users__ - Currently, I have predefined 5 username/password pairs that can be used to sign into the chat application. This was done for testing, but in the future I hope to create a system for which new users can be added, and these credentials are not stored in `TCPserver.c`, where the sever code is located.
